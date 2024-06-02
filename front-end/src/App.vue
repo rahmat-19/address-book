@@ -2,7 +2,7 @@
   <div>
     <nav>
       <div class="title-navbar">Countac Mange</div>
-      <div v-if="isLoggedIn" class="item-navbar">
+      <div v-if="useAuthPinia.user" class="item-navbar">
         <router-link
           :to="{ name: 'home' }"
           class="item"
@@ -16,7 +16,7 @@
           >Users</router-link
         >
       </div>
-      <div v-if="isLoggedIn" class="item-logout" @click="handleLogout">
+      <div v-if="useAuthPinia.user" class="item-logout" @click="handleLogout">
         <span>Logout</span>
       </div>
     </nav>
@@ -28,26 +28,23 @@
   </div>
 </template>
 
-<script>
-import NotificationProvider from "./components/utils/NotificationProvider.vue";
-import Api from "./components/utils/axios";
+<script setup>
 import { clearAllCookies } from "./components/utils/clearCookies";
 import { getHeaderConfigAxios } from "./components/utils/getHeaderConfigAxios";
-import VueCookies from "vue-cookies";
+import { useAuthStore } from "./components/stores/authStore";
+import { useRouter } from "vue-router";
 
-export default {
-  components: { NotificationProvider },
-  computed: {
-    isLoggedIn() {
-      return !!VueCookies.get("token"); // or however you determine if a user is logged in
-    },
-  },
-  methods: {
-    handleLogout() {
-      Api.post("logout", {}, getHeaderConfigAxios());
-      clearAllCookies();
-      this.$router.push({ name: "login" });
-    },
-  },
+import NotificationProvider from "./components/utils/NotificationProvider.vue";
+import Api from "./components/utils/axios";
+import { inject } from "vue";
+
+const useAuthPinia = useAuthStore();
+const router = useRouter();
+const handleLogout = () => {
+  Api.post("logout", {}, getHeaderConfigAxios());
+  clearAllCookies();
+  useAuthPinia.handleLogout();
+
+  router.push({ name: "login" });
 };
 </script>

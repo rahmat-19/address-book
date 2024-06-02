@@ -1,16 +1,20 @@
-//import createApp from Vue
 import { createApp } from "vue";
+import { createPinia } from "pinia";
+import VueCookies from "vue-cookies";
 
-//import component App
 import App from "./App.vue";
 
-//import config router
 import router from "./router/index";
-import "./style.css"; // Impor CSS di sini
-//create App Vue
+import "./style.css";
+import { useAuthStore } from "./components/stores/authStore";
+
+const pinia = createPinia();
 const app = createApp(App);
 
-//gunakan "router" di Vue dengan plugin "use"
+app.use(pinia);
 app.use(router);
+
+const authStore = useAuthStore();
+authStore.getUserCookie();
 
 app.mount("#app");
