@@ -123,6 +123,42 @@ class ContactController extends Controller
             ], $status);
         }
     }
+    public function updateStatus(Request $request, string $id)
+    {
+        try {
+            $user = Contact::findOrFail($id);
+            $this->authorize('update', $user);
+
+            $validated = $request->validate([
+                'active' => ['required'],
+            ]);
+            
+            // Retrieve the validated input data...
+    
+            // Save data
+            $user->update($validated);
+            
+            return response()->json([
+                "status" => true,
+                "message" => "User update successfully",
+            ], 201);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+            // Tangani ketika klien tidak ditemukan
+            return response()->json([
+                "status" => false,
+                "message" => "User not found.",
+            ], 404);
+        } catch (\Throwable $th) {
+            //throw $th;
+            $status = method_exists($th, 'getStatusCode') ? $th->getStatusCode() : 500;
+            $message = $th->getMessage();
+        
+            return response()->json([
+                "status" => false,
+                "message" => $message,
+            ], $status);
+        }
+    }
 
     public function destroy(string $id)
     {

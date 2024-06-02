@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('/users/{id}', [ContactController::class, 'destroy'])->name('users.show');
     Route::post('/users', [ContactController::class, 'store'])->name('users.store');
     Route::patch('/users/{id}', [ContactController::class, 'update'])->name('users.update');
+    Route::patch('/users/status/update/{id}', [ContactController::class, 'updateStatus'])->name('users.update.status');
     Route::get('/users/document/export', [ContactController::class, 'export']);
     Route::get('/users/document/tamplate', [ContactController::class, 'download']);
     Route::post('/users/document/import-contacts', [ContactController::class, 'import'])->name('contacts.import');
