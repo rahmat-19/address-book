@@ -9,6 +9,7 @@ import {
   tamplateImport,
   importData,
   allData,
+  updateActive,
 } from "../utils/ImplementApiContact";
 
 export function useFetchContacts(
@@ -127,6 +128,17 @@ export function useFetchContacts(
     }
   }
 
+  const handleUpdateActive = async (id, curentStatus) => {
+    try {
+      console.log(id, !curentStatus);
+      await updateActive(id, { active: !curentStatus });
+      showNotification("Contact Update Sucessfuly", "success");
+      fetchDataUsers();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   onMounted(() => {
     fetchDataUsers();
   });
@@ -147,6 +159,7 @@ export function useFetchContacts(
     getUsesrExportExcel,
     redirectPageCreateContact,
     redirectPageUpdateContact,
+    handleUpdateActive,
     deleteUserSelected,
     getTamplateImport,
     uploadFile,

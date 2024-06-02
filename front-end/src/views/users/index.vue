@@ -24,6 +24,7 @@ const {
   getTamplateImport,
   uploadFile,
   openModal,
+  handleUpdateActive,
 } = useFetchContacts(searchQuery, activeFilter, selectedCategory, currentPage);
 
 const prevPage = () => {
@@ -98,6 +99,7 @@ const handleUploadFile = () => {
         :contacts="contacts"
         @click:redirect:update="redirectPageUpdateContact"
         @click:delete="deleteUserSelected"
+        @click:update:active="handleUpdateActive"
       ></TableViews>
 
       <!-- PAGINATION -->

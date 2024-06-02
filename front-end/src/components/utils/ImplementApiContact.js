@@ -15,6 +15,9 @@ export const createData = (from) =>
 export const updateData = (id, from) =>
   Api.patch(`${resource}/${id}`, from, getHeaderConfigAxios());
 
+export const updateActive = (id, from) =>
+  Api.patch(`${resource}/status/update/${id}`, from, getHeaderConfigAxios());
+
 export const removeData = (id) =>
   Api.delete(`${resource}/${id}`, getHeaderConfigAxios());
 

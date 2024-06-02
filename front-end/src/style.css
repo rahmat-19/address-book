@@ -180,6 +180,14 @@ nav .item-logout {
   cursor: pointer;
   border-radius: 5px;
 }
+.action-btn-edit-status {
+  background-color: #2e7cb8;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
 .action-btn-delete {
   background-color: #cb0000;
   color: #ffffff;

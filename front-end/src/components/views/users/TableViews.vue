@@ -22,7 +22,14 @@ defineProps(["contacts"]);
         <tr v-else v-for="(contact, index) in contacts" :key="index">
           <td>{{ contact?.name }}</td>
           <td>+{{ contact?.phone_number }}</td>
-          <td>{{ contact?.active ? "Active" : "Not Active" }}</td>
+          <td>
+            <button
+              class="action-btn-edit-status"
+              @click="$emit('click:update:active', contact?.id, contact.active)"
+            >
+              {{ contact?.active ? "Active" : "Not Active" }}
+            </button>
+          </td>
           <td>{{ contact?.address }}</td>
           <td>{{ contact?.category }}</td>
           <td>
