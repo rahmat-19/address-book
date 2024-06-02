@@ -7,6 +7,8 @@ import {
   removeData,
   exportData,
   tamplateImport,
+  importData,
+  allData,
 } from "../utils/ImplementApiContact";
 
 export function useFetchContacts(
@@ -27,6 +29,7 @@ export function useFetchContacts(
     total: 0,
     per_page: 10,
   });
+  const isModalOpen = ref(false);
 
   const fetchDataUsers = async () => {
     const query = buildQuery({
@@ -35,7 +38,7 @@ export function useFetchContacts(
       category: selectedCategory.value,
       page: currentPage.value,
     });
-    const { data } = (await Api.get(`/users?${query}`)).data;
+    const { data } = (await allData(query)).data;
     contacts.value = data.data;
     pagination.value = {
       current_page: data.current_page,
@@ -104,6 +107,26 @@ export function useFetchContacts(
     });
   };
 
+  async function uploadFile(file) {
+    if (!file.value) {
+      showNotification("Please select a file", "error");
+
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file.value);
+
+    try {
+      await importData(formData);
+      isModalOpen.value = false;
+      fetchDataUsers();
+      showNotification("Import Contact Successfuly", "success");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  }
+
   onMounted(() => {
     fetchDataUsers();
   });
@@ -112,14 +135,21 @@ export function useFetchContacts(
     fetchDataUsers();
   });
 
+  const openModal = () => {
+    isModalOpen.value = !isModalOpen.value;
+  };
+
   return {
     contacts,
     pagination,
+    isModalOpen,
     fetchDataUsers,
     getUsesrExportExcel,
     redirectPageCreateContact,
     redirectPageUpdateContact,
     deleteUserSelected,
     getTamplateImport,
+    uploadFile,
+    openModal,
   };
 }

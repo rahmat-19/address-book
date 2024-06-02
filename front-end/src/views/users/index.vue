@@ -6,33 +6,32 @@ import FillterContact from "../../components/views/users/FillterContact.vue";
 import TableViews from "../../components/views/users/TableViews.vue";
 import ActionButtonContacts from "../../components/views/users/ActionButtonContacts.vue";
 import Modal from "../../components/utils/Modal.vue";
-import Api from "../../components/utils/axios";
 
 const searchQuery = ref("");
 const activeFilter = ref("");
 const selectedCategory = ref("");
 const currentPage = ref(1);
-const isModalOpen = ref(false);
 const file = ref(null);
 
 const {
   contacts,
   pagination,
+  isModalOpen,
   getUsesrExportExcel,
   deleteUserSelected,
   redirectPageCreateContact,
   redirectPageUpdateContact,
   getTamplateImport,
-fetchDataUsers,
+  uploadFile,
+  openModal,
 } = useFetchContacts(searchQuery, activeFilter, selectedCategory, currentPage);
-
-const showNotification = inject("showNotification");
 
 const prevPage = () => {
   if (pagination.value.prev_page_url) {
     currentPage.value--;
   }
 };
+
 const nextPage = () => {
   if (pagination.value.next_page_url) {
     currentPage.value++;
@@ -49,37 +48,13 @@ const onChangeStatus = (value) => {
   activeFilter.value = value;
 };
 
-const openModal = () => {
-  isModalOpen.value = !isModalOpen.value;
+const onFileChange = (event) => {
+  file.value = event.target.files[0];
 };
 
-function onFileChange(event) {
-  file.value = event.target.files[0];
-}
-
-async function uploadFile() {
-  if (!file.value) {
-    showNotification("Please select a file", "error");
-
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("file", file.value);
-
-  try {
-    await Api.post("/users/document/import-contacts", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    isModalOpen.value = false;
-    fetchDataUsers();
-    showNotification("Import Contact Successfuly", "success");
-  } catch (error) {
-    console.error("Error uploading file:", error);
-  }
-}
+const handleUploadFile = () => {
+  uploadFile(file);
+};
 </script>
 
 <template>
@@ -93,7 +68,7 @@ async function uploadFile() {
 
     <div class="body-users">
       <!-- SHOW MODAL -->
-      <Modal :isOpen="isModalOpen" @close="openModal">
+      <Modal dal :isOpen="isModalOpen" @close:modal="openModal">
         <p>Import Contact</p>
         <div class="modal-container">
           <span class="text-title">Import File Excel</span>
@@ -105,28 +80,30 @@ async function uploadFile() {
             Upload File
           </label>
 
-          <button class="text-button" @click="uploadFile">Submit File</button>
+          <button class="text-button" @click="handleUploadFile">
+            Submit File
+          </button>
         </div>
       </Modal>
 
       <!-- BUTTION -->
       <ActionButtonContacts
-        :getUsesrExportExcel="getUsesrExportExcel"
-        :redirectPageCreateContact="redirectPageCreateContact"
-        :openModal="openModal"
+        @click:export="getUsesrExportExcel"
+        @click:redirect:create="redirectPageCreateContact"
+        @close:modal="openModal"
       ></ActionButtonContacts>
 
       <!-- TABLE -->
       <TableViews
         :contacts="contacts"
-        :redirectPageUpdateContact="redirectPageUpdateContact"
-        :deleteUserSelected="deleteUserSelected"
+        @click:redirect:update="redirectPageUpdateContact"
+        @click:delete="deleteUserSelected"
       ></TableViews>
 
       <!-- PAGINATION -->
       <Pagiantion
-        :prevPage="prevPage"
-        :nextPage="nextPage"
+        @click:prev="prevPage"
+        @click:next="nextPage"
         :pagination="pagination"
       ></Pagiantion>
     </div>

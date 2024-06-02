@@ -1,11 +1,11 @@
 <script setup>
-defineProps(["prevPage", "nextPage", "pagination"]);
+defineProps(["pagination"]);
 </script>
 <template>
   <div class="pagination">
     <button
       class="pagination-button"
-      @click="prevPage"
+      @click="$emit('click:prev')"
       :disabled="!pagination.prev_page_url"
     >
       Previous
@@ -15,7 +15,7 @@ defineProps(["prevPage", "nextPage", "pagination"]);
     >
     <button
       class="pagination-button"
-      @click="nextPage"
+      @click="$emit('click:next')"
       :disabled="!pagination.next_page_url"
     >
       Next

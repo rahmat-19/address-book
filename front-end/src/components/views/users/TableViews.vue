@@ -1,5 +1,5 @@
 <script setup>
-defineProps(["contacts", "redirectPageUpdateContact", "deleteUserSelected"]);
+defineProps(["contacts"]);
 </script>
 
 <template>
@@ -29,13 +29,13 @@ defineProps(["contacts", "redirectPageUpdateContact", "deleteUserSelected"]);
             <div class="button-group-table">
               <button
                 class="action-btn-edit"
-                @click="redirectPageUpdateContact(contact?.id)"
+                @click="$emit('click:redirect:update', contact?.id)"
               >
                 Edit
               </button>
               <button
                 class="action-btn-delete"
-                @click="deleteUserSelected(contact?.id)"
+                @click="$emit('click:delete', contact?.id)"
               >
                 Delete
               </button>

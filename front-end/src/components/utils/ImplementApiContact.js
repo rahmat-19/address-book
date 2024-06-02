@@ -1,23 +1,46 @@
 import Api from "./axios";
+import { getHeaderConfigAxios } from "./getHeaderConfigAxios";
+import VueCookies from "vue-cookies";
+
 const resource = "/users";
-export const allData = () => Api.get(resource);
+export const allData = (query) =>
+  Api.get(`${resource}?${query}`, getHeaderConfigAxios());
 
-export const getData = (id) => Api.get(`${resource}/${id}`);
+export const getData = (id) =>
+  Api.get(`${resource}/${id}`, getHeaderConfigAxios());
 
-export const createData = (task) => Api.post(resource, task);
+export const createData = (from) =>
+  Api.post(resource, from, getHeaderConfigAxios());
 
-export const updateData = (id, task) => Api.patch(`${resource}/${id}`, task);
+export const updateData = (id, from) =>
+  Api.patch(`${resource}/${id}`, from, getHeaderConfigAxios());
 
-export const removeData = (id) => Api.delete(`${resource}/${id}`);
+export const removeData = (id) =>
+  Api.delete(`${resource}/${id}`, getHeaderConfigAxios());
 
-export const dashboardData = () => Api.get(`${resource}/dashboard/group-by`);
+export const dashboardData = () =>
+  Api.get(`${resource}/dashboard/group-by`, getHeaderConfigAxios());
 
 export const exportData = (query) =>
   Api.get(`${resource}/document/export?${query}`, {
     responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${VueCookies.get("token")}`,
+    },
   });
 
 export const tamplateImport = () =>
   Api.get(`${resource}/document/tamplate`, {
     responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${VueCookies.get("token")}`,
+    },
+  });
+
+export const importData = (form) =>
+  Api.post(`${resource}/document/import-contacts`, form, {
+    responseType: "blob",
+    headers: {
+      Authorization: `Bearer ${VueCookies.get("token")}`,
+    },
   });

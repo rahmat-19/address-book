@@ -1,7 +1,7 @@
 <template>
   <div v-if="isOpen" class="modal">
     <div class="modal-content">
-      <span class="close" @click="$emit('close')">x</span>
+      <span class="close" @click="$emit('close:modal')">x</span>
       <slot></slot>
     </div>
   </div>

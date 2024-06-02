@@ -42,7 +42,6 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const isAuthenticated = VueCookies.get("user");
-  console.log(isAuthenticated);
   if (to.name !== "login" && to.name !== "register" && !isAuthenticated)
     next({ name: "login" });
   else if (to.name == "login" && isAuthenticated) next({ name: "home" });

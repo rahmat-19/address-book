@@ -17,25 +17,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
 
-        $request->session()->regenerate();
-
-        // $user = User::where('email', $request->email)->first();
-        // dd(Hash::check($request->password, $user->password));
+        $user = User::where('email', $request->email)->first();
  
-        // if (! $user || ! Hash::check($request->password, $user->password)) {
-        //     throw ValidationException::withMessages([
-        //         'email' => ['The provided credentials are incorrect.'],
-        //     ]);
-        // }
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
      
-        // return $user->createToken($request->device_name)->plainTextToken;
-
         return response()->json([
             'status' => true,
             'message' => 'Success Login',
-            // 'data' => $user->createToken($request->device_name)->plainTextToken
+            'data' => $user->createToken($request->email)->plainTextToken
         ], 201);
     }
 

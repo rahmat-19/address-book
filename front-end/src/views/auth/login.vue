@@ -2,14 +2,24 @@
   <div class="login-container">
     <div class="login-box">
       <h1>Login</h1>
-      <form @submit.prevent="login">
+      <form @submit.prevent="handleSubmitLogin">
         <div class="input-group">
           <label for="username">Email</label>
-          <input type="email" id="username" v-model="username" required />
+          <input
+            type="email"
+            id="username"
+            v-model="formLogin.email"
+            required
+          />
         </div>
         <div class="input-group">
           <label for="password">Password</label>
-          <input type="password" id="password" v-model="password" required />
+          <input
+            type="password"
+            id="password"
+            v-model="formLogin.password"
+            required
+          />
         </div>
         <button type="submit">Login</button>
       </form>
@@ -23,28 +33,16 @@
 
 <script setup>
 import { ref } from "vue";
-import Api from "../../components/utils/axios";
-import { useRouter } from "vue-router";
-import VueCookies from "vue-cookies";
+import { useAuth } from "../../components/hooks/useAuth";
 
-const username = ref("");
-const password = ref("");
-const router = useRouter();
+const formLogin = ref({
+  email: "",
+  password: "",
+});
 
-const login = async () => {
-  try {
-    await Api.get("/sanctum/csrf-cookie");
-    await Api.post("/login", {
-      email: username.value,
-      password: password.value,
-    });
-    const user = (await Api.get("/api/user")).data;
-    VueCookies.set("user", user, "2h");
-
-    router.push({ name: "home" });
-  } catch (error) {
-    console.error("Error during login", error);
-  }
+const { login } = useAuth();
+const handleSubmitLogin = () => {
+  login(formLogin.value);
 };
 </script>
 
