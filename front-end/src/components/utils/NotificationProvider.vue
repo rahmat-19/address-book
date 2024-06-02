@@ -1,7 +1,12 @@
 <template>
   <div>
     <slot></slot>
-    <Notification v-for="(notification, index) in notifications" :key="index" />
+    <Notification
+      v-for="(notification, index) in notifications"
+      :key="index"
+      :message="notification.message"
+      :type="notification.type"
+    />
   </div>
 </template>
 

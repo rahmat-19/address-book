@@ -1,18 +1,7 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import Api from "../components/utils/axios";
+import { useFatchDashboard } from "../components/hooks/useFatchDashboard";
 
-const groupBy = ref(null);
-
-const fetchDataUsers = async () => {
-  const { data } = (await Api.get("/users/dashboard/group-by")).data;
-  groupBy.value = data;
-};
-
-onMounted(() => {
-  //call method "fetchDataUsers"
-  fetchDataUsers();
-});
+const { groupBy } = useFatchDashboard();
 </script>
 
 <template>
@@ -25,23 +14,23 @@ onMounted(() => {
       </div>
       <div class="dashboard-item-2 dashboard-item">
         <p>Active User</p>
-        <p>{{ groupBy?.totalUsers }}</p>
+        <p>{{ groupBy?.activceCount?.activeCount }}</p>
       </div>
       <div class="dashboard-item-3 dashboard-item">
         <p>Not Active User</p>
-        <p>{{ groupBy?.totalUsers }}</p>
+        <p>{{ groupBy?.activceCount?.notActiveCount }}</p>
       </div>
       <div class="dashboard-item-4 dashboard-item">
-        <p>Total Users</p>
-        <p>{{ groupBy?.totalUsers }}</p>
+        <p>Category Family</p>
+        <p>{{ groupBy?.categoryCounts?.family }}</p>
       </div>
       <div class="dashboard-item-5 dashboard-item">
-        <p>Total Users</p>
-        <p>{{ groupBy?.totalUsers }}</p>
+        <p>Category Friend</p>
+        <p>{{ groupBy?.categoryCounts?.friend }}</p>
       </div>
       <div class="dashboard-item-6 dashboard-item">
-        <p>Total Users</p>
-        <p>{{ groupBy?.totalUsers }}</p>
+        <p>Category Work</p>
+        <p>{{ groupBy?.categoryCounts?.work }}</p>
       </div>
     </div>
   </div>

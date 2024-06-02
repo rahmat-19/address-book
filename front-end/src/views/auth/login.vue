@@ -4,8 +4,8 @@
       <h1>Login</h1>
       <form @submit.prevent="login">
         <div class="input-group">
-          <label for="username">Username</label>
-          <input type="text" id="username" v-model="username" required />
+          <label for="username">Email</label>
+          <input type="email" id="username" v-model="username" required />
         </div>
         <div class="input-group">
           <label for="password">Password</label>
@@ -39,21 +39,12 @@ const login = async () => {
       password: password.value,
     });
     const user = (await Api.get("/api/user")).data;
-
-    VueCookies.set("user", user, "1h");
-    // VueCookies.set("user", { user: "rahmat" }, "1h");
-
-    // await new Promise((resolve, reject) => {
-    //   VueCookies.set("user", { user: "rahmat" }, "1h", () => {
-    //     resolve();
-    //   });
-    // });
+    VueCookies.set("user", user, "2h");
 
     router.push({ name: "home" });
   } catch (error) {
     console.error("Error during login", error);
   }
-  // Implement your login logic here
 };
 </script>
 

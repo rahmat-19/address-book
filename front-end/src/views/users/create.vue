@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from "vue";
-import Api from "../../components/utils/axios";
+import { inject, ref } from "vue";
+import { createData } from "../../components/utils/ImplementApiContact";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const showNotification = inject("showNotification");
 
 const formData = ref({
   name: "",
@@ -14,15 +15,13 @@ const formData = ref({
 const errors = ref(null);
 
 const submitForm = async () => {
-  await Api.post("/users", formData.value)
-    .then(() => {
-      //redirect
-      router.push({ name: "users.index" });
-    })
-    .catch((error) => {
-      //assign response error data to state "errors"
-      errors.value = error.response.data;
-    });
+  try {
+    await createData(formData.value);
+    showNotification("Create Contact Sucessfuly", "success");
+    router.push({ name: "users.index" });
+  } catch (error) {
+    errors.value = error.response.data;
+  }
 };
 </script>
 

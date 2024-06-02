@@ -1,7 +1,7 @@
 <template>
   <div class="body-filter">
-    <p>-- Filtered Data Users --</p>
-    <div>
+    <p class="titile">-- Filtered Data Contacts --</p>
+    <div class="item-filter">
       <!-- Search Input -->
       <div>
         <label for="search">Search:</label>
@@ -62,3 +62,15 @@ const onChangeStatus = () => {
   emit("change:status", activeFilter.value);
 };
 </script>
+
+<style>
+@media screen and (max-width: 768px) {
+  .titile {
+    display: none;
+  }
+  .item-filter {
+    display: flex;
+    flex-direction: column;
+  }
+}
+</style>

@@ -1,15 +1,24 @@
 // src/composables/useFetchUsers.js
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, inject } from "vue";
 import Api from "../utils/axios";
 import { buildQuery } from "../utils/queryBuilder";
+import { useRouter } from "vue-router";
+import {
+  removeData,
+  exportData,
+  tamplateImport,
+} from "../utils/ImplementApiContact";
 
-export function useFetchUsers(
+export function useFetchContacts(
   searchQuery,
   activeFilter,
   selectedCategory,
   currentPage
 ) {
-  const users = ref([]);
+  const router = useRouter();
+  const showNotification = inject("showNotification");
+
+  const contacts = ref([]);
   const pagination = ref({
     current_page: 1,
     last_page: 1,
@@ -27,7 +36,7 @@ export function useFetchUsers(
       page: currentPage.value,
     });
     const { data } = (await Api.get(`/users?${query}`)).data;
-    users.value = data.data;
+    contacts.value = data.data;
     pagination.value = {
       current_page: data.current_page,
       last_page: data.last_page,
@@ -45,16 +54,31 @@ export function useFetchUsers(
       category: selectedCategory.value,
     });
     try {
-      const response = await Api.get(`/users/document/export?${query}`, {
-        responseType: "blob",
-      });
+      const response = await exportData(query);
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "users.xlsx");
+      link.setAttribute("download", "contact.xlsx");
       document.body.appendChild(link);
       link.click();
+      showNotification("Data Contact Sucessfuly Export", "success");
+    } catch (error) {
+      console.error("Error downloading Excel file:", error);
+    }
+    return true;
+  };
+  const getTamplateImport = async () => {
+    try {
+      const response = await tamplateImport();
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "tamplate.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      showNotification("Tamplate Import Download Sucessfuly", "success");
     } catch (error) {
       console.error("Error downloading Excel file:", error);
     }
@@ -62,8 +86,22 @@ export function useFetchUsers(
   };
 
   const deleteUserSelected = async (id) => {
-    await Api.delete(`/users/${id}`);
-    fetchDataUsers();
+    try {
+      await removeData(id);
+      showNotification("Contact Deleted Sucessfuly", "success");
+      fetchDataUsers();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const redirectPageCreateContact = () => {
+    router.push({ name: "users.create" });
+  };
+  const redirectPageUpdateContact = (id) => {
+    router.push({
+      name: "users.update",
+      params: { id },
+    });
   };
 
   onMounted(() => {
@@ -75,10 +113,13 @@ export function useFetchUsers(
   });
 
   return {
-    users,
+    contacts,
     pagination,
     fetchDataUsers,
     getUsesrExportExcel,
+    redirectPageCreateContact,
+    redirectPageUpdateContact,
     deleteUserSelected,
+    getTamplateImport,
   };
 }

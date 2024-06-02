@@ -4,32 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Exports\UsersExport;
 use App\Http\Requests\ContactRequest;
+use App\Imports\ContactsImport;
 use App\Models\Contact;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ContactController extends Controller
 {
     public function dashboard() {
-        $totalUsers = Contact::count();
+        $totalUsers = Contact::where('user_id', auth()->id())->count();
         $categoryCounts = Contact::select('category', \DB::raw('count(*) as count'))
+                        ->where('user_id', auth()->id())
                         ->groupBy('category')
                         ->get()
                         ->pluck('count', 'category');
         $activceCount = Contact::select('active', \DB::raw('count(*) as count'))
+                        ->where('user_id', auth()->id())
                         ->groupBy('active')
                         ->get()
-                        ->pluck('count', 'active');
-                         // Response
+                        ->pluck('count', 'active')
+                        ->mapWithKeys(function ($count, $active) {
+                            return [$active ? 'activeCount' : 'notActiveCount' => $count];
+                        });
         return response()->json([
             "status" => true,
             "message" => "User fatch successfully",
             "data" => compact('totalUsers', 'categoryCounts', 'activceCount')
         ], 200);
     }
-    /**
-     * Display a listing of the resource.
-     */
+
+
+
     public function index()
     {
         // Response
@@ -40,22 +46,12 @@ class ContactController extends Controller
         ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(ContactRequest $request)
     {
         try {
-            // Retrieve the validated input data...
             $validated = $request->validated();
+            $validated['user_id'] = auth()->id();
+
     
             // Save data
             Contact::create($validated);
@@ -74,23 +70,18 @@ class ContactController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $user = Contact::find($id);
         $this->authorize('view', $user);
 
         if ($user) {
-            // User found
             return response()->json([
                 "status" => true,
                 "message" => "User fatch successfully",
                 "data" => $user
             ], 201);
         } else {
-            // User not found
             return response()->json([
                 "status" => true,
                 "message" => "User Not found",
@@ -98,17 +89,7 @@ class ContactController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(ContactRequest $request, string $id)
     {
         try {
@@ -143,9 +124,6 @@ class ContactController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         try {
@@ -179,11 +157,28 @@ class ContactController extends Controller
         return Excel::download(new UsersExport(request(['search', 'active', 'category'])), 'users.xlsx');
     }
 
-    protected function failedAuthorization()
+    public function import(Request $request)
     {
-        return response()->json([
-            'status' => false,
-            'message' => 'Unauthorized'
-        ], 403);
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        Excel::import(new ContactsImport, $request->file('file'));
+
+        return  response()->json([
+            'status' => true,
+            'message' => 'Contact import successfully',
+        ], 201);
+    }
+
+    public function download()
+    {
+        $file_path = public_path(). "/files/tampalet_import.xlsx";
+        if (file_exists($file_path)) {
+            return response()->download($file_path, 'template_import.xlsx');
+        } else {
+            abort(404, 'File not found');
+        }
+
     }
 }

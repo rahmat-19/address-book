@@ -1,13 +1,17 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import Api from "../../components/utils/axios";
-import { useRouter, onBeforeRouteUpdate, useRoute } from "vue-router";
+import { inject, onMounted, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import {
+  updateData,
+  getData,
+} from "../../components/utils/ImplementApiContact";
 
 const router = useRouter();
 const route = useRoute();
 
-const user = ref(null);
 const errors = ref(null);
+const showNotification = inject("showNotification");
+
 const formData = ref({
   name: "",
   category: "",
@@ -16,22 +20,21 @@ const formData = ref({
 });
 
 const submitForm = async () => {
-  await Api.patch(`/users/${route.params.id}`, formData.value)
-    .then(() => {
-      router.push({ name: "users.index" });
-    })
-    .catch((error) => {
-      errors.value = error.response.data;
-    });
+  try {
+    await updateData(route.params.id, formData.value);
+    showNotification("Update Contact Sucessfuly", "success");
+    router.push({ name: "users.index" });
+  } catch (error) {
+    errors.value = error.response.data;
+  }
 };
 
 const getUserSelected = async (id) => {
-  const { data } = (await Api.get(`/users/${id}`)).data;
+  const { data } = (await getData(id)).data;
   formData.value.name = data.name;
   formData.value.category = data.category;
   formData.value.phone_number = data.phone_number;
   formData.value.address = data.address;
-  return (user.value = data);
 };
 onMounted(() => {
   if (route.params.id) {

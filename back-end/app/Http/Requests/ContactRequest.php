@@ -39,7 +39,7 @@ class ContactRequest extends FormRequest
             'category' => 'required',
             'address' => 'nullable',
         ];
-        if ($this->routeIs('contacts.update')) {
+        if ($this->routeIs('users.update')) {
             $id = $this->route('id');
             $rules['phone_number'] = ['required', 'min:3', 'max:13', 'starts_with:62',  Rule::unique('contacts')->ignore($id)];
         } else {

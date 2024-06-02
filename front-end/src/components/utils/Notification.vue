@@ -1,6 +1,9 @@
+<script setup>
+defineProps(["message", "type"]);
+</script>
 <template>
-  <div class="notification error">
-    <span class="title">Error</span>
-    <span class="message">Berhasil Menambahkan Data</span>
+  <div class="notification" :class="type">
+    <span class="title">{{ type }}</span>
+    <span class="message">{{ message }}</span>
   </div>
 </template>

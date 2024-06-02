@@ -4,7 +4,7 @@
       <h1>Register</h1>
       <form @submit.prevent="register">
         <div class="input-group">
-          <label for="username">Username</label>
+          <label for="username">name</label>
           <input type="text" id="username" v-model="username" required />
         </div>
         <div class="input-group">
@@ -31,13 +31,12 @@ const password = ref("");
 const confirmPassword = ref("");
 
 const register = () => {
-  if (password.value !== confirmPassword.value) {
-    alert("Passwords do not match!");
-    return;
-  }
+  // if (password.value !== confirmPassword.value) {
+  //   alert("Passwords do not match!");
+  //   return;
+  // }
 
   // Implement your registration logic here
-  console.log("Registering with", username.value, email.value, password.value);
 };
 </script>
 
