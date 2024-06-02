@@ -2,18 +2,54 @@
   <div class="register-container">
     <div class="register-box">
       <h1>Register</h1>
-      <form @submit.prevent="register">
+      <form @submit.prevent="handleRegistrasi">
         <div class="input-group">
           <label for="username">name</label>
-          <input type="text" id="username" v-model="username" required />
+          <input
+            type="text"
+            id="username"
+            v-model="formRegistration.name"
+            required
+          />
+          <p
+            v-if="errors?.errors?.name"
+            v-for="item in errors?.errors.name"
+            class="mesage-error"
+          >
+            {{ item }}
+          </p>
         </div>
         <div class="input-group">
           <label for="email">Email</label>
-          <input type="email" id="email" v-model="email" required />
+          <input
+            type="email"
+            id="email"
+            v-model="formRegistration.email"
+            required
+          />
+          <p
+            v-if="errors?.errors?.email"
+            v-for="item in errors?.errors.email"
+            class="mesage-error"
+          >
+            {{ item }}
+          </p>
         </div>
         <div class="input-group">
           <label for="password">Password</label>
-          <input type="password" id="password" v-model="password" required />
+          <input
+            type="password"
+            id="password"
+            v-model="formRegistration.password"
+            required
+          />
+          <p
+            v-if="errors?.errors?.password"
+            v-for="item in errors?.errors.password"
+            class="mesage-error"
+          >
+            {{ item }}
+          </p>
         </div>
 
         <button type="submit">Register</button>
@@ -24,19 +60,18 @@
 
 <script setup>
 import { ref } from "vue";
+import { useAuth } from "../../components/hooks/useAuth";
 
-const username = ref("");
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
+const { registrasi, errors } = useAuth();
 
-const register = () => {
-  // if (password.value !== confirmPassword.value) {
-  //   alert("Passwords do not match!");
-  //   return;
-  // }
+const formRegistration = ref({
+  name: "",
+  email: "",
+  password: "",
+});
 
-  // Implement your registration logic here
+const handleRegistrasi = async () => {
+  registrasi(formRegistration.value);
 };
 </script>
 

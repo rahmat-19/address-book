@@ -101,12 +101,16 @@ nav .title-navbar {
 }
 nav .item-navbar {
   display: flex;
-  width: 80%;
+  width: 70%;
   gap: 0 2rem;
 }
 nav .item {
   text-decoration: none;
   color: white;
+}
+nav .item-logout {
+  width: 10%;
+  cursor: pointer;
 }
 
 .body-component {
