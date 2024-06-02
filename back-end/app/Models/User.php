@@ -19,10 +19,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'category',
-        'phone_number',
-        'address',
-        'active',
+        'email',
+        'password',
     ];
 
     /**
@@ -30,32 +28,22 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    // protected $hidden = [
-    //     'password',
-    //     'remember_token',
-    // ];
+    protected $hidden = [
+        'password',
+    ];
 
     /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
      */
-    // protected $casts = [
-    //     'email_verified_at' => 'datetime',
-    //     'password' => 'hashed',
-    // ];
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 
-    public function scopeFillter($query, array $filters)
+    public function contacts()
     {
-        $query->when($filters["search"] ?? false, function ($query, $search) {
-            return $query->where("name", "like", "%" .  $search . "%")
-                        ->orWhere("phone_number", "like", "%" .  $search . "%");
-        });
-        $query->when($filters["active"] ?? false, function ($query, $active) {
-            return $query->where("active", $active);
-        });
-        $query->when($filters["category"] ?? false, function ($query, $category) {
-            return $query->where("category", $category);
-        });
+        return $this->hasMany(Contact::class);
     }
+
 }

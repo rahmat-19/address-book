@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Contact;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
@@ -24,7 +25,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping,  WithSty
     */
     public function collection()
     {
-        return User::latest()->fillter($this->filter)->get();
+        return Contact::where('user_id', auth()->id())->latest('id')->fillter($this->filter)->get();
     }
 
     public function headings(): array

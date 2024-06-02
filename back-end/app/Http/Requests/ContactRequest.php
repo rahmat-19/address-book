@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class UserRequest extends FormRequest
+class ContactRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -39,11 +39,11 @@ class UserRequest extends FormRequest
             'category' => 'required',
             'address' => 'nullable',
         ];
-        if ($this->routeIs('users.update')) {
+        if ($this->routeIs('contacts.update')) {
             $id = $this->route('id');
-            $rules['phone_number'] = ['required', 'min:3', 'max:13', 'starts_with:62',  Rule::unique('users')->ignore($id)];
+            $rules['phone_number'] = ['required', 'min:3', 'max:13', 'starts_with:62',  Rule::unique('contacts')->ignore($id)];
         } else {
-            $rules['phone_number'] = 'unique:users|required|min:3|max:13|starts_with:62';
+            $rules['phone_number'] = 'unique:contacts|required|min:3|max:13|starts_with:62';
         }
         return $rules;
     }

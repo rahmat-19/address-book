@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
-class UserFactory extends Factory
+class ContactFactory extends Factory
 {
     /**
      * The current password being used by the factory.
@@ -27,6 +27,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'phone_number' => fake()->numerify('62###########'), // Generate nomor telepon dengan 10 digit angka
             'active' => fake()->numberBetween(0, 1), // Generate angka acak antara 0 dan 1
+            'user_id' => fake()->numberBetween(1, 2), // Generate angka acak antara 0 dan 1
             'address' => fake()->address(),
             'category' => fake()->randomElement(['family', 'friend', 'work']),
             
