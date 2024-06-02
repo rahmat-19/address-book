@@ -38,19 +38,6 @@ onMounted(() => {
     getUserSelected(route.params.id);
   }
 });
-// Hook untuk mengeksekusi logika sebelum rute dimasukkan
-// onBeforeRouteEnter((to, from, next) => {
-//     next((vm) => {
-//       // Menyimpan data ke dalam state
-//       vm.user.value = "dskfjdskfj";
-//     });
-//   fetchUserData(to.params.userId)
-//     .then((data) => {
-//     })
-//     .catch(() => {
-//       next("/error"); // Alihkan ke halaman error jika terjadi kesalahan
-//     });
-// });
 </script>
 
 <template>

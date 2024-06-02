@@ -4,12 +4,9 @@ import Api from "../components/utils/axios";
 
 const groupBy = ref(null);
 
-//method fetchDataPosts
 const fetchDataUsers = async () => {
-  //fetch data
-  const { data } = (await Api.get("/users/group-by")).data;
+  const { data } = (await Api.get("/users/dashboard/group-by")).data;
   groupBy.value = data;
-  console.log(data);
 };
 
 onMounted(() => {

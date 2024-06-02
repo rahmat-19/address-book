@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import { useFetchUsers } from "../../components/hooks/useFetchUsers";
-// import FillterUssers from "../../components/views/users/FillterUsers.vue";
+import FillterUssers from "../../components/views/users/FillterUsers.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -11,25 +11,23 @@ const activeFilter = ref("");
 const selectedCategory = ref("");
 const currentPage = ref(1);
 
-const {
-  users,
-  pagination,
-  fetchDataUsers,
-  getUsesrExportExcel,
-  deleteUserSelected,
-} = useFetchUsers(searchQuery, activeFilter, selectedCategory, currentPage);
+const { users, pagination, getUsesrExportExcel, deleteUserSelected } =
+  useFetchUsers(searchQuery, activeFilter, selectedCategory, currentPage);
+
+const showNotification = inject("showNotification");
+const notify = () => {
+  showNotification("sdkjhgfsd", "success");
+};
 const prevPage = () => {
   if (pagination.value.prev_page_url) {
-    currentPage.value--;
+    pagination.value.current_page--;
   }
 };
-
 const nextPage = () => {
   if (pagination.value.next_page_url) {
-    currentPage.value++;
+    pagination.value.current_page++;
   }
 };
-
 const redirectPageCreateContact = () => {
   router.push({ name: "users.create" });
 };
@@ -37,49 +35,26 @@ const redirectPageUpdateContact = (id) => {
   router.push({
     name: "users.update",
     params: { id },
-    // query: { query: "update" },
   });
+};
+const onChangeSearch = (value) => {
+  searchQuery.value = value;
+};
+const onChangeCategory = (value) => {
+  selectedCategory.value = value;
+};
+const onChangeStatus = (value) => {
+  activeFilter.value = value;
 };
 </script>
 
 <template>
   <div class="container-users">
-    <div class="body-filter">
-      <p>-- Filtered Data Users --</p>
-      <div>
-        <!-- Search Input -->
-        <div>
-          <label for="search">Search:</label>
-          <input
-            id="search"
-            type="text"
-            v-model="searchQuery"
-            placeholder="Search..."
-          />
-        </div>
-
-        <!-- Select Active/Non-active -->
-        <div>
-          <label for="status">Status:</label>
-          <select id="status" v-model="activeFilter">
-            <option value="">All</option>
-            <option value="1">Active</option>
-            <option value="0">Non-active</option>
-          </select>
-        </div>
-
-        <!-- Select Country -->
-        <div>
-          <label for="country">Country:</label>
-          <select id="country" v-model="selectedCategory">
-            <option value="">All</option>
-            <option value="family">Family</option>
-            <option value="friend">Friend</option>
-            <option value="work">Work</option>
-          </select>
-        </div>
-      </div>
-    </div>
+    <FillterUssers
+      @change:serach="onChangeSearch"
+      @change:category="onChangeCategory"
+      @change:status="onChangeStatus"
+    ></FillterUssers>
     <div class="body-users">
       <div class="user-data-header">
         <div>
@@ -89,7 +64,7 @@ const redirectPageUpdateContact = (id) => {
           <button class="action-btn-create" @click="getUsesrExportExcel">
             Export
           </button>
-          <button class="action-btn-create">Import</button>
+          <button class="action-btn-create" @click="notify">Import</button>
           <button class="action-btn-create" @click="redirectPageCreateContact">
             + Create User
           </button>
@@ -109,7 +84,7 @@ const redirectPageUpdateContact = (id) => {
         </thead>
         <tbody>
           <tr v-if="users.length == 0">
-            <td colspan="5" class="alert-not-available">Data Not Available!</td>
+            <td colspan="6" class="alert-not-available">Data Not Available!</td>
           </tr>
           <tr v-else v-for="(user, index) in users" :key="index">
             <td>{{ user?.name }}</td>

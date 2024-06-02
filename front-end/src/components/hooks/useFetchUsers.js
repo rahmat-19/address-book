@@ -45,7 +45,7 @@ export function useFetchUsers(
       category: selectedCategory.value,
     });
     try {
-      const response = await Api.get(`/users/export?${query}`, {
+      const response = await Api.get(`/users/document/export?${query}`, {
         responseType: "blob",
       });
 

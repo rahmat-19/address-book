@@ -1,5 +1,6 @@
 //import vue router
 import { createRouter, createWebHistory } from "vue-router";
+import VueCookies from "vue-cookies";
 
 //define a routes
 const routes = [
@@ -7,6 +8,19 @@ const routes = [
     path: "/",
     name: "home",
     component: () => import(/* webpackChunkName: "home" */ "../views/home.vue"),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () =>
+      import(/* webpackChunkName: "home" */ "../views/auth/login.vue"),
+  },
+  {
+    path: "/register",
+    name: "register",
+    // ASYNC IMPORT
+    component: () =>
+      import(/* webpackChunkName: "home" */ "../views/auth/register.vue"),
   },
   {
     path: "/users",
@@ -30,9 +44,18 @@ const routes = [
 
 //create router
 const router = createRouter({
-  linkActiveClass: "active",
+  // linkActiveClass: "active",
   history: createWebHistory(),
   routes, // <-- routes,
+});
+
+console.log(VueCookies.get("user"), "=====");
+const isAuthenticated = VueCookies.get("user");
+
+router.beforeEach(async (to, from, next) => {
+  if (to.name !== "login" && !isAuthenticated) next({ name: "login" });
+  else if (to.name == "login" && isAuthenticated) next({ name: "home" });
+  else next();
 });
 
 export default router;
