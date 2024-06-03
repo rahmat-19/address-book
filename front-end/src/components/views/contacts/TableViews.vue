@@ -8,7 +8,8 @@ const emit = defineEmits([
   "click:delete",
 ]);
 const handelButton = (emitKey, arg1 = null, arg2 = null) => {
-  if (emitKey == "status") emit("click:update:status", arg1, arg2);
+  console.log(emitKey);
+  if (emitKey == "status") emit("click:update:active", arg1, arg2);
   if (emitKey == "update") emit("click:redirect:update", arg1);
   if (emitKey == "delete") emit("click:delete", arg1);
 };
