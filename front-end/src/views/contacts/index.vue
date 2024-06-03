@@ -1,11 +1,11 @@
 <script setup>
 import { inject, ref } from "vue";
 import { useFetchContacts } from "../../components/hooks/useFetchContacts";
-import Pagiantion from "../../components/views/users/Pagiantion.vue";
-import FillterContact from "../../components/views/users/FillterContact.vue";
-import TableViews from "../../components/views/users/TableViews.vue";
-import ActionButtonContacts from "../../components/views/users/ActionButtonContacts.vue";
-import Modal from "../../components/utils/Modal.vue";
+import Pagiantion from "../../components/views/contacts/Pagiantion.vue";
+import FillterContact from "../../components/views/contacts/FillterContact.vue";
+import TableViews from "../../components/views/contacts/TableViews.vue";
+import ActionButtonContacts from "../../components/views/contacts/ActionButtonContacts.vue";
+import Modal from "../../components/hallper/Modal.vue";
 
 const searchQuery = ref("");
 const activeFilter = ref("");

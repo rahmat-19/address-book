@@ -85,6 +85,8 @@ export function useFetchContacts(
       link.click();
       showNotification("Tamplate Import Download Sucessfuly", "success");
     } catch (error) {
+      showNotification("Tamplate Import Download Failed", "error");
+
       console.error("Error downloading Excel file:", error);
     }
     return true;
@@ -96,6 +98,7 @@ export function useFetchContacts(
       showNotification("Contact Deleted Sucessfuly", "success");
       fetchDataUsers();
     } catch (error) {
+      showNotification("Contact Delete Failed", "error");
       console.log(error);
     }
   };
@@ -137,6 +140,7 @@ export function useFetchContacts(
       showNotification("Contact Update Sucessfuly", "success");
       fetchDataUsers();
     } catch (error) {
+      showNotification("Contact Update Failed", "success");
       console.log(error);
     }
   };

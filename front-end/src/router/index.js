@@ -21,17 +21,17 @@ const routes = [
   {
     path: "/contact",
     name: "users.index",
-    component: () => import("../views/users/index.vue"),
+    component: () => import("../views/contacts/index.vue"),
   },
   {
     path: "/contact/create",
     name: "users.create",
-    component: () => import("../views/users/create.vue"),
+    component: () => import("../views/contacts/create.vue"),
   },
   {
     path: "/contact/:id",
     name: "users.update",
-    component: () => import("../views/users/update.vue"),
+    component: () => import("../views/contacts/update.vue"),
   },
 ];
 

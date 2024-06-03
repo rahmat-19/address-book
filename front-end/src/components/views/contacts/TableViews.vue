@@ -1,5 +1,17 @@
 <script setup>
+import Button from "../../hallper/Button.vue";
+
 defineProps(["contacts"]);
+const emit = defineEmits([
+  "click:update:status",
+  "click:redirect:update",
+  "click:delete",
+]);
+const handelButton = (emitKey, arg1 = null, arg2 = null) => {
+  if (emitKey == "status") emit("click:update:status", arg1, arg2);
+  if (emitKey == "update") emit("click:redirect:update", arg1);
+  if (emitKey == "delete") emit("click:delete", arg1);
+};
 </script>
 
 <template>
@@ -23,29 +35,31 @@ defineProps(["contacts"]);
           <td>{{ contact?.name }}</td>
           <td>+{{ contact?.phone_number }}</td>
           <td>
-            <button
-              class="action-btn-edit-status"
-              @click="$emit('click:update:active', contact?.id, contact.active)"
+            <Button
+              size="small"
+              @click="handelButton('status', contact?.id, contact.active)"
             >
               {{ contact?.active ? "Active" : "Not Active" }}
-            </button>
+            </Button>
           </td>
           <td>{{ contact?.address }}</td>
           <td>{{ contact?.category }}</td>
           <td>
             <div class="button-group-table">
-              <button
-                class="action-btn-edit"
-                @click="$emit('click:redirect:update', contact?.id)"
+              <Button
+                size="small"
+                variant="gold"
+                @click="handelButton('update', contact?.id)"
               >
                 Edit
-              </button>
-              <button
-                class="action-btn-delete"
-                @click="$emit('click:delete', contact?.id)"
+              </Button>
+              <Button
+                size="small"
+                variant="danger"
+                @click="handelButton('delete', contact?.id)"
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </td>
         </tr>

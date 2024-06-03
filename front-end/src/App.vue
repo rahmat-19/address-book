@@ -34,9 +34,8 @@ import { getHeaderConfigAxios } from "./components/utils/getHeaderConfigAxios";
 import { useAuthStore } from "./components/stores/authStore";
 import { useRouter } from "vue-router";
 
-import NotificationProvider from "./components/utils/NotificationProvider.vue";
+import NotificationProvider from "./components/hallper/NotificationProvider.vue";
 import Api from "./components/utils/axios";
-import { inject } from "vue";
 
 const useAuthPinia = useAuthStore();
 const router = useRouter();
