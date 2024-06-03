@@ -15,7 +15,8 @@ class Contact extends Model
         'phone_number',
         'address',
         'active',
-        'user_id'
+        'user_id',
+        'image'
     ];
 
     public function user()

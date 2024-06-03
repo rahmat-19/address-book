@@ -9,6 +9,7 @@ use App\Models\Contact;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ContactController extends Controller
 {
@@ -52,9 +53,16 @@ class ContactController extends Controller
             $validated = $request->validated();
             $validated['user_id'] = auth()->id();
 
-    
+            // Simpan gambar
+            $image = $request->file('image');
+            if ($image) {
+                $imageName = time() . '.' . $request->image->extension();
+                $validated['image'] = Storage::url('images/' . $imageName);
+            }
+            
             // Save data
             Contact::create($validated);
+            if ($image)  $request->image->storeAs('images', $imageName, 'public');
             return response()->json([
                 "status" => true,
                 "message" => "User create successfully",
@@ -133,8 +141,6 @@ class ContactController extends Controller
                 'active' => ['required'],
             ]);
             
-            // Retrieve the validated input data...
-    
             // Save data
             $user->update($validated);
             
@@ -216,5 +222,30 @@ class ContactController extends Controller
             abort(404, 'File not found');
         }
 
+    }
+
+    public function showImage(string $filename)
+    {
+            // Ambil gambar dari penyimpanan
+        $path = storage_path('app/public/images/' . $filename);
+
+        // Periksa apakah file ada
+        if (!Storage::disk('public')->exists('images/' . $filename)) {
+            abort(404);
+        }
+
+        // Membaca file gambar
+        $file = file_get_contents($path);
+
+        // Mendapatkan tipe MIME
+        $mimeType = mime_content_type($path);
+
+        // Mengatur header respons
+        $headers = [
+            'Content-Type' => $mimeType,
+        ];
+
+        // Mengembalikan respons dengan gambar
+        return response($file, 200, $headers);
     }
 }

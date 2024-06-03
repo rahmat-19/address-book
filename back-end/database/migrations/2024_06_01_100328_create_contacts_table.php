@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->bigInteger('phone_number')->unique(); 
+            $table->string('image')->nullable(); 
             $table->boolean('active')->default(0); 
             $table->string('address')->nullable(); 
             $table->enum('category', ['family', 'friend', 'work']);

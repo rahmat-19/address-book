@@ -38,6 +38,7 @@ class ContactRequest extends FormRequest
             'active' => 'nullable',
             'category' => 'required',
             'address' => 'nullable',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
         if ($this->routeIs('users.update')) {
             $id = $this->route('id');

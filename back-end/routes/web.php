@@ -15,17 +15,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('/show-image', [ContactController::class, 'showImage'])->name('users.show.image');
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/users/dashboard/group-by', [ContactController::class, 'dashboard'])->name('users.dashboard');
     Route::get('/users', [ContactController::class, 'index'])->name('users.index');
     Route::get('/users/{id}', [ContactController::class, 'show'])->name('users.show');
-    Route::delete('/users/{id}', [ContactController::class, 'destroy'])->name('users.show');
     Route::post('/users', [ContactController::class, 'store'])->name('users.store');
+    Route::delete('/users/{id}', [ContactController::class, 'destroy'])->name('users.show');
     Route::patch('/users/{id}', [ContactController::class, 'update'])->name('users.update');
     Route::patch('/users/status/update/{id}', [ContactController::class, 'updateStatus'])->name('users.update.status');
     Route::get('/users/document/export', [ContactController::class, 'export']);
     Route::get('/users/document/tamplate', [ContactController::class, 'download']);
     Route::post('/users/document/import-contacts', [ContactController::class, 'import'])->name('contacts.import');
+    Route::get('/users/document/show-image/{filename}', [ContactController::class, 'showImage'])->name('contacts.import');
 });
 
 
