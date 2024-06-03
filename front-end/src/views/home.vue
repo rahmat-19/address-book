@@ -9,15 +9,15 @@ const { groupBy } = useFatchDashboard();
     <p>Dashboard</p>
     <div class="dashboard">
       <div class="dashboard-item-1 dashboard-item">
-        <p>Total User</p>
+        <p>Total Contact</p>
         <p>{{ groupBy?.totalUsers ?? 0 }}</p>
       </div>
       <div class="dashboard-item-2 dashboard-item">
-        <p>Active User</p>
+        <p>Active Contact</p>
         <p>{{ groupBy?.activceCount?.activeCount ?? 0 }}</p>
       </div>
       <div class="dashboard-item-3 dashboard-item">
-        <p>Not Active User</p>
+        <p>Not Active Contact</p>
         <p>{{ groupBy?.activceCount?.notActiveCount ?? 0  }}</p>
       </div>
       <div class="dashboard-item-4 dashboard-item">

@@ -43,7 +43,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping,  WithSty
     {
         return [
             $user->name,
-            "'+62"  .'82145035990', // Nomor telepon dengan kode negara +62
+            "'+". $user->phone_number, // Nomor telepon dengan kode negara +62
             $user->active ? 'Active' : 'Not Active',
             $user->category,
             $user->address,
@@ -86,7 +86,7 @@ class UsersExport implements FromCollection, WithHeadings, WithMapping,  WithSty
     public function columnFormats(): array
     {
         return [
-            'B' => NumberFormat::FORMAT_TEXT, 
+            'B' => NumberFormat::FORMAT_NUMBER, 
         ];
     }
 }

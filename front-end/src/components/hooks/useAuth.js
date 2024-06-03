@@ -23,7 +23,6 @@ export function useAuth() {
       router.push({ name: "home" });
     } catch (error) {
       showNotification("Login Failed", "error");
-
       console.error("Error during login", error);
     }
   };
@@ -32,20 +31,14 @@ export function useAuth() {
     try {
       await Api.get("/sanctum/csrf-cookie");
       const { data } = (await Api.post("/register", formRegistrasi)).data;
-      const user = (
-        await Api.get("/api/user", {
-          headers: { Authorization: `Bearer ${data}` },
-        })
-      ).data;
       VueCookies.set("token", data, "2h");
-      VueCookies.set("user", user, "2h");
+      useAuthPinia.getUserLogin(data);
 
       showNotification("Registration Successfuly", "success");
 
       router.push({ name: "home" });
     } catch (error) {
       errors.value = error.response.data;
-      console.log(error.response.data);
       showNotification("Registration Failed", "error");
     }
   };

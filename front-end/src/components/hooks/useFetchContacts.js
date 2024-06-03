@@ -68,6 +68,7 @@ export function useFetchContacts(
       link.click();
       showNotification("Data Contact Sucessfuly Export", "success");
     } catch (error) {
+      showNotification("Data Contact Failed Export", "error");
       console.error("Error downloading Excel file:", error);
     }
     return true;
@@ -124,13 +125,14 @@ export function useFetchContacts(
       fetchDataUsers();
       showNotification("Import Contact Successfuly", "success");
     } catch (error) {
+      showNotification("Import Contact failed", "error");
+
       console.error("Error uploading file:", error);
     }
   }
 
   const handleUpdateActive = async (id, curentStatus) => {
     try {
-      console.log(id, !curentStatus);
       await updateActive(id, { active: !curentStatus });
       showNotification("Contact Update Sucessfuly", "success");
       fetchDataUsers();

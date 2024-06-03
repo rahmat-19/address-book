@@ -106,6 +106,14 @@ class ContactController extends Controller
             
             // Retrieve the validated input data...
             $validated = $request->validated();
+
+             $image = $request->file('image');
+             if ($image) {
+                 $imageName = time() . '.' . $request->image->extension();
+                 $validated['image'] = Storage::url('images/' . $imageName);
+                 $request->image->storeAs('images', $imageName, 'public');
+                 Storage::delete(str_replace('/storage', 'public', $user->image));
+             }
     
             // Save data
             $user->update($validated);
@@ -140,6 +148,8 @@ class ContactController extends Controller
             $validated = $request->validate([
                 'active' => ['required'],
             ]);
+
+            $validated['active'] = $validated['active'] == 'true' ? 1 : 0;
             
             // Save data
             $user->update($validated);
@@ -215,7 +225,7 @@ class ContactController extends Controller
 
     public function download()
     {
-        $file_path = public_path(). "/files/tampalet_import.xlsx";
+        $file_path = public_path(). "/files/template_import.xlsx";
         if (file_exists($file_path)) {
             return response()->download($file_path, 'template_import.xlsx');
         } else {
@@ -224,28 +234,4 @@ class ContactController extends Controller
 
     }
 
-    public function showImage(string $filename)
-    {
-            // Ambil gambar dari penyimpanan
-        $path = storage_path('app/public/images/' . $filename);
-
-        // Periksa apakah file ada
-        if (!Storage::disk('public')->exists('images/' . $filename)) {
-            abort(404);
-        }
-
-        // Membaca file gambar
-        $file = file_get_contents($path);
-
-        // Mendapatkan tipe MIME
-        $mimeType = mime_content_type($path);
-
-        // Mengatur header respons
-        $headers = [
-            'Content-Type' => $mimeType,
-        ];
-
-        // Mengembalikan respons dengan gambar
-        return response($file, 200, $headers);
-    }
 }

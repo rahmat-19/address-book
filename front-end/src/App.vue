@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav>
-      <div class="title-navbar">Countac Mange</div>
+      <div class="title-navbar">Address Book</div>
       <div v-if="useAuthPinia.user" class="item-navbar">
         <router-link
           :to="{ name: 'home' }"
@@ -13,7 +13,7 @@
           :to="{ name: 'users.index' }"
           exactActiveClass="active"
           class="item"
-          >Users</router-link
+          >Contact</router-link
         >
       </div>
       <div v-if="useAuthPinia.user" class="item-logout" @click="handleLogout">

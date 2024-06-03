@@ -13,10 +13,10 @@ export const createData = (from) =>
   Api.post(resource, from, getHeaderConfigAxios());
 
 export const updateData = (id, from) =>
-  Api.patch(`${resource}/${id}`, from, getHeaderConfigAxios());
+  Api.post(`${resource}/${id}`, from, getHeaderConfigAxios());
 
 export const updateActive = (id, from) =>
-  Api.patch(`${resource}/status/update/${id}`, from, getHeaderConfigAxios());
+  Api.post(`${resource}/status/update/${id}`, from, getHeaderConfigAxios());
 
 export const removeData = (id) =>
   Api.delete(`${resource}/${id}`, getHeaderConfigAxios());
@@ -33,7 +33,7 @@ export const exportData = (query) =>
   });
 
 export const tamplateImport = () =>
-  Api.get(`${resource}/document/tamplate`, {
+  Api.get(`${resource}/document/import-tamplate`, {
     responseType: "blob",
     headers: {
       Authorization: `Bearer ${VueCookies.get("token")}`,

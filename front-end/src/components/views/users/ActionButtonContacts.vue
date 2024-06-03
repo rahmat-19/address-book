@@ -11,7 +11,7 @@
         Import
       </button>
       <button class="action-btn-create" @click="$emit('click:redirect:create')">
-        + Create User
+        + Create Contact
       </button>
     </div>
   </div>

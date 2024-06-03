@@ -11,9 +11,18 @@ const formData = ref({
   category: "",
   phone_number: "62",
   address: "",
+  imageUrl: null,
+  image: null,
 });
 const errors = ref(null);
 
+const onFileChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    formData.value.imageUrl = URL.createObjectURL(file);
+    formData.value.image = file;
+  }
+};
 const submitForm = async () => {
   try {
     await createData(formData.value);
@@ -27,7 +36,16 @@ const submitForm = async () => {
 
 <template>
   <div class="form-container">
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="submitForm" enctype="multipart/form-data">
+      <div class="image-upload">
+        <div v-if="formData.imageUrl" class="image-preview">
+          <img :src="formData.imageUrl" alt="Image Preview" />
+        </div>
+        <input id="file-input" type="file" @change="onFileChange" />
+        <label for="file-input" class="custom-file-upload">
+          Upload Image
+        </label>
+      </div>
       <div class="form-group">
         <label for="name">Name:</label>
         <input type="text" id="name" v-model="formData.name" />
@@ -79,3 +97,39 @@ const submitForm = async () => {
     </form>
   </div>
 </template>
+
+<style scoped>
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #42b983;
+  color: white;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+#file-input {
+  display: none;
+}
+
+.image-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #42b983;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>

@@ -27,8 +27,10 @@ class Contact extends Model
     public function scopeFillter($query, array $filters)
     {
         $query->when($filters["search"] ?? false, function ($query, $search) {
-            return $query->where("name", "like", "%" .  $search . "%")
-                        ->orWhere("phone_number", "like", "%" .  $search . "%");
+            $query->where(function ($query) use ($search) {
+                $query->where("name", "like", "%" . $search . "%")
+                      ->orWhere("phone_number", "like", "%" . $search . "%");
+            });
         });
         $query->when(isset($filters["active"]), function ($query) use ($filters) {
             return $query->where("active", $filters["active"]);
