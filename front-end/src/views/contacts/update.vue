@@ -27,17 +27,26 @@ const submitForm = async () => {
     showNotification("Update Contact Sucessfuly", "success");
     router.push({ name: "users.index" });
   } catch (error) {
+    showNotification("Update Contact Failed", "success");
     errors.value = error.response.data;
   }
 };
 
 const getUserSelected = async (id) => {
-  const { data } = (await getData(id)).data;
-  formData.value.name = data.name;
-  formData.value.category = data.category;
-  formData.value.phone_number = data.phone_number;
-  formData.value.address = data.address;
-  formData.value.imageUrl = data.image ? `http://localhost:8000${data.image}` : null;
+  try {
+    const { data } = (await getData(id)).data;
+    formData.value.name = data.name;
+    formData.value.category = data.category;
+    formData.value.phone_number = data.phone_number;
+    formData.value.address = data.address;
+    formData.value.imageUrl = data.image
+      ? `http://localhost:8000${data.image}`
+      : null;
+    showNotification("Show Contact Sucessfuly", "success");
+  } catch (error) {
+    showNotification("Show Contact Failed", "error");
+    router.push({ name: "users.index" });
+  }
 };
 const onFileChange = (event) => {
   const file = event.target.files[0];

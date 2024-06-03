@@ -18,19 +18,19 @@ const { groupBy } = useFatchDashboard();
       </div>
       <div class="dashboard-item-3 dashboard-item">
         <p>Not Active Contact</p>
-        <p>{{ groupBy?.activceCount?.notActiveCount ?? 0  }}</p>
+        <p>{{ groupBy?.activceCount?.notActiveCount ?? 0 }}</p>
       </div>
       <div class="dashboard-item-4 dashboard-item">
         <p>Category Family</p>
-        <p>{{ groupBy?.categoryCounts?.family ?? 0  }}</p>
+        <p>{{ groupBy?.categoryCounts?.family ?? 0 }}</p>
       </div>
       <div class="dashboard-item-5 dashboard-item">
         <p>Category Friend</p>
-        <p>{{ groupBy?.categoryCounts?.friend ?? 0  }}</p>
+        <p>{{ groupBy?.categoryCounts?.friend ?? 0 }}</p>
       </div>
       <div class="dashboard-item-6 dashboard-item">
         <p>Category Work</p>
-        <p>{{ groupBy?.categoryCounts?.work ?? 0  }}</p>
+        <p>{{ groupBy?.categoryCounts?.work ?? 0 }}</p>
       </div>
     </div>
   </div>
