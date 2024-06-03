@@ -140,8 +140,7 @@ export function useFetchContacts(
       showNotification("Contact Update Sucessfuly", "success");
       fetchDataUsers();
     } catch (error) {
-      showNotification("Contact Update Failed", "success");
-      console.log(error);
+      showNotification("Contact Update Failed", "error");
     }
   };
 
