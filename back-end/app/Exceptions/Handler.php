@@ -5,7 +5,9 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
+use PDOException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -65,5 +67,28 @@ class Handler extends ExceptionHandler
                 ], 422);
             }
         });
+
+        // Add this block to handle database exceptions
+    $this->renderable(function (QueryException $e, $request) {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Database query error',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    });
+
+    // Optional: Handle other specific database-related exceptions if needed
+    $this->renderable(function (PDOException $e, $request) {
+        if ($request->expectsJson()) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Database error',
+                'error' => $e->errorInfo[2],
+            ], 500);
+        }
+    });
     }
 }

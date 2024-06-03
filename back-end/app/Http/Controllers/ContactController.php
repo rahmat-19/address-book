@@ -128,15 +128,6 @@ class ContactController extends Controller
                 "status" => false,
                 "message" => "User not found.",
             ], 404);
-        } catch (\Throwable $th) {
-            //throw $th;
-            $status = method_exists($th, 'getStatusCode') ? $th->getStatusCode() : 500;
-            $message = $th->getMessage();
-        
-            return response()->json([
-                "status" => false,
-                "message" => $message,
-            ], $status);
         }
     }
     public function updateStatus(Request $request, string $id)
@@ -164,16 +155,7 @@ class ContactController extends Controller
                 "status" => false,
                 "message" => "User not found.",
             ], 404);
-        } catch (\Throwable $th) {
-            //throw $th;
-            $status = method_exists($th, 'getStatusCode') ? $th->getStatusCode() : 500;
-            $message = $th->getMessage();
-        
-            return response()->json([
-                "status" => false,
-                "message" => $message,
-            ], $status);
-        }
+        } 
     }
 
     public function destroy(string $id)
@@ -195,13 +177,7 @@ class ContactController extends Controller
                 "status" => false,
                 "message" => "User not found.",
             ], 404);
-        } catch (\Throwable $e) {
-            $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ], $status); // Internal Server Error status code
-        }
+        } 
     }
 
     public function export() 
